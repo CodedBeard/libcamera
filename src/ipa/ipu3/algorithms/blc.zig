@@ -1,9 +1,9 @@
 const std = @import("std");
 const log = @import("log");
 
-const IPAContext = @import("ipa_context.zig").IPAContext;
-const IPAFrameContext = @import("ipa_context.zig").IPAFrameContext;
-const ipu3_uapi_params = @import("ipu3_uapi_params.zig").ipu3_uapi_params;
+const IPAContext = @import("../ipa_context.zig").IPAContext;
+const IPAFrameContext = @import("../ipa_context.zig").IPAFrameContext;
+const ipu3_uapi_params = @import("../ipu3_uapi_params.zig").ipu3_uapi_params;
 
 pub const BlackLevelCorrection = struct {
     pub fn new() BlackLevelCorrection {

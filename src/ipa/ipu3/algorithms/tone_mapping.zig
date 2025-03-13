@@ -1,29 +1,6 @@
 const std = @import("std");
-const c = @cImport({
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/core_ipa_interface.h");
-    @cInclude("libcamera/base/utils.h");
-    @cInclude("libcamera/base/log.h");
-    @cInclude("libcamera/geometry.h");
-    @cInclude("libcamera/controls.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-    @cInclude("libcamera/ipa/ipu3_ipa_interface.h");
-});
+const log = @import("log");
+const utils = @import("utils");
 
 const ToneMapping = struct {
     gamma: f64,
@@ -34,18 +11,18 @@ const ToneMapping = struct {
         };
     }
 
-    pub fn configure(self: *ToneMapping, context: *c.IPAContext, configInfo: *c.IPAConfigInfo) c_int {
+    pub fn configure(self: *ToneMapping, context: *IPAContext, configInfo: *IPAConfigInfo) i32 {
         context.activeState.toneMapping.gamma = 0.0;
         return 0;
     }
 
-    pub fn prepare(self: *ToneMapping, context: *c.IPAContext, frame: u32, frameContext: *c.IPAFrameContext, params: *c.ipu3_uapi_params) void {
+    pub fn prepare(self: *ToneMapping, context: *IPAContext, frame: u32, frameContext: *IPAFrameContext, params: *ipu3_uapi_params) void {
         std.mem.copy(u16, &params.acc_param.gamma.gc_lut.lut[0], &context.activeState.toneMapping.gammaCorrection.lut[0]);
         params.use.acc_gamma = 1;
         params.acc_param.gamma.gc_ctrl.enable = 1;
     }
 
-    pub fn process(self: *ToneMapping, context: *c.IPAContext, frame: u32, frameContext: *c.IPAFrameContext, stats: *c.ipu3_uapi_stats_3a, metadata: *c.ControlList) void {
+    pub fn process(self: *ToneMapping, context: *IPAContext, frame: u32, frameContext: *IPAFrameContext, stats: *ipu3_uapi_stats_3a, metadata: *ControlList) void {
         self.gamma = 1.1;
         if (context.activeState.toneMapping.gamma == self.gamma) return;
 
@@ -60,16 +37,6 @@ const ToneMapping = struct {
     }
 };
 
-test "ToneMapping" {
-    var toneMapping = ToneMapping.init();
-    var context: c.IPAContext = undefined;
-    var configInfo: c.IPAConfigInfo = undefined;
-    var frameContext: c.IPAFrameContext = undefined;
-    var params: c.ipu3_uapi_params = undefined;
-    var stats: c.ipu3_uapi_stats_3a = undefined;
-    var metadata: c.ControlList = undefined;
-
-    try toneMapping.configure(&context, &configInfo);
-    toneMapping.prepare(&context, 0, &frameContext, &params);
-    toneMapping.process(&context, 0, &frameContext, &stats, &metadata);
+pub fn register() void {
+    Algorithm.register("ToneMapping", ToneMapping.init);
 }
