@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 rpi_ipa_common_sources = files([
-    'ipa_base.cpp',
+    'ipa_base.zig',
 ])
 
 rpi_ipa_common_includes = [
