@@ -1,0 +1,30 @@
+const libcamera = @import("libcamera");
+const utils = @import("libcamera/base/utils");
+
+pub const CameraMode = struct {
+    bitdepth: u32,
+    width: u16,
+    height: u16,
+    sensorWidth: u16,
+    sensorHeight: u16,
+    binX: u8,
+    binY: u8,
+    cropX: u16,
+    cropY: u16,
+    scaleX: f64,
+    scaleY: f64,
+    noiseFactor: f64,
+    minLineLength: utils.Duration,
+    maxLineLength: utils.Duration,
+    minFrameDuration: utils.Duration,
+    maxFrameDuration: utils.Duration,
+    transform: libcamera.Transform,
+    minFrameLength: u32,
+    maxFrameLength: u32,
+    sensitivity: f64,
+    pixelRate: u64,
+    minExposureTime: utils.Duration,
+    maxExposureTime: utils.Duration,
+    minAnalogueGain: f64,
+    maxAnalogueGain: f64,
+};
